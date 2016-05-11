@@ -6,64 +6,104 @@ file_extensions:
   - rd
 scope: text.tex.latex.rd
 contexts:
+  prototype:
+    - include: comments
+
   main:
+    # exteneded from latex
+    - include: scope:text.tex.latex#preamble
+    - include: scope:text.tex.latex#structure
+    - include: scope:text.tex.latex#includes
+    - include: scope:text.tex.latex#sections
+    - include: scope:text.tex.latex#text-decorators
+    - include: scope:text.tex.latex#references
+    - include: scope:text.tex.latex#verbatim
+    - include: scope:text.tex.latex#url
+    - include: scope:text.tex.latex#invalid-quotations
+    - include: scope:text.tex.latex#lists
+    - include: scope:text.tex.latex#external-packages
+    - include: scope:text.tex.latex#macros
+    - include: scope:text.tex.latex#controls
+    - include: scope:text.tex.latex#catcode
+    - include: braces
+    - include: scope:text.tex.latex#boxes
+    - include: scope:text.tex.latex#block-math
+    - include: scope:text.tex.latex#inline-math
+    - include: scope:text.tex.latex#constants
+    - include: scope:text.tex.latex#begin-end-commands
+    - include: scope:text.tex.latex#general-commands
+
+  comments:
+    - include: scope:text.tex#comments
+
+  braces:
+    - match: '\{'
+      scope: punctuation.definition.brace.begin.latex
+      push:
+        - meta_scope: meta.group.braces.latex
+        - match: '\}'
+          scope: punctuation.definition.brace.end.latex
+          pop: true
+        - include: main
+
+  rd-commands:
     - match: '((\\)(?:alias|docType|keyword|name|title))(\{)'
       captures:
         1: keyword.other.section.rd
-        2: punctuation.definition.function.rd
-        3: punctuation.definition.arguments.begin.rd
+        2: punctuation.definition.backslash.rd
+        3: punctuation.definition.brace.begin.rd
       push:
         - meta_scope: meta.section.rd
         - meta_content_scope: entity.name.tag.rd
         - match: '(\})'
           captures:
-            1: punctuation.definition.arguments.end.rd
+            1: punctuation.definition.brace.end.rd
           pop: true
         - include: main
     - match: '((\\)(?:details|format|references|source))(\{)'
       captures:
         1: keyword.other.section.rd
-        2: punctuation.definition.function.rd
-        3: punctuation.definition.arguments.begin.rd
+        2: punctuation.definition.backslash.rd
+        3: punctuation.definition.brace.begin.rd
       push:
         - meta_scope: meta.section.rd
         - match: '(\})'
           captures:
-            1: punctuation.definition.arguments.end.rd
+            1: punctuation.definition.brace.end.rd
           pop: true
         - include: main
     - match: '((\\)(?:usage))(\{)(?:\n)?'
       captures:
         1: keyword.other.usage.rd
-        2: punctuation.definition.function.rd
-        3: punctuation.definition.arguments.begin.rd
+        2: punctuation.definition.backslash.rd
+        3: punctuation.definition.brace.begin.rd
       push:
         - meta_scope: meta.usage.rd
         - meta_content_scope: source.r.embedded
         - match: '(\})'
           captures:
-            1: punctuation.definition.arguments.end.rd
+            1: punctuation.definition.brace.end.rd
           pop: true
         - include: scope:source.r
     - match: '((\\)(?:examples))(\{)(?:\n)?'
       captures:
         1: keyword.other.examples.rd
-        2: punctuation.definition.function.rd
-        3: punctuation.definition.arguments.begin.rd
+        2: punctuation.definition.backslash.rd
+        3: punctuation.definition.brace.begin.rd
       push:
         - meta_scope: meta.examples.rd
         - meta_content_scope: source.r.embedded
         - match: '(\})'
           captures:
-            1: punctuation.definition.arguments.end.rd
+            1: punctuation.definition.brace.end.rd
           pop: true
         - include: scope:source.r
     - match: '((\\)(?:author))(\{)([\w\s]+?)\s+(<)([^>]*)(>)'
       scope: meta.author.rd
       captures:
         1: keyword.other.author.rd
-        2: punctuation.definition.function.rd
-        3: punctuation.definition.arguments.begin.rd
+        2: punctuation.definition.backslash.rd
+        3: punctuation.definition.brace.begin.rd
         4: entity.name.tag.author.rd
         5: punctuation.definition.link.rd
         6: markup.underline.link.rd
